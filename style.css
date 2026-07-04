@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Starlight Ops" />
+  <title>Starlight Glamping — Operations</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <span class="header-star">✦</span>
+        <div>
+          <div class="header-title">Starlight Glamping</div>
+          <div class="header-sub">Operations & Checklists</div>
+        </div>
+      </div>
+      <div id="headerDate" class="header-date"></div>
+    </div>
+  </header>
+
+  <!-- TAB BAR -->
+  <nav class="tab-bar">
+    <button class="tab active" data-tab="staff">Staff</button>
+    <button class="tab" data-tab="manager">Manager</button>
+  </nav>
+
+  <!-- STAFF VIEW -->
+  <div id="view-staff" class="view active">
+
+    <!-- Name input -->
+    <div class="page-section">
+      <label class="field-label">Your Name <span class="required">*</span></label>
+      <input type="text" id="staffName" class="text-input" placeholder="Enter your name to begin" autocomplete="name" />
+    </div>
+
+    <!-- Checklist selector -->
+    <div class="page-section">
+      <label class="field-label">Select Checklist</label>
+      <div class="checklist-grid">
+        <button class="cl-btn active" data-cl="daily-am">🌅 Daily AM</button>
+        <button class="cl-btn" data-cl="daily-pm">🌆 Daily PM</button>
+        <button class="cl-btn" data-cl="weekly">📅 Weekly</button>
+        <button class="cl-btn" data-cl="monthly">📆 Monthly</button>
+        <button class="cl-btn" data-cl="campfire">🔥 Campfire</button>
+        <button class="cl-btn" data-cl="maintenance">🔧 Maintenance</button>
+        <button class="cl-btn" data-cl="bearspray">🐻 Bear Spray</button>
+        <button class="cl-btn" data-cl="heater">♨️ Heaters</button>
+      </div>
+    </div>
+
+    <!-- Checklist panels -->
+    <div id="checklist-area"></div>
+
+    <!-- Notes -->
+    <div class="page-section">
+      <label class="field-label">Notes / Issues</label>
+      <textarea id="staffNotes" class="text-area" placeholder="Any issues, maintenance needs, or observations…"></textarea>
+    </div>
+
+    <div class="page-section">
+      <button id="submitBtn" class="btn-primary">Submit Checklist</button>
+    </div>
+
+    <div id="successBanner" class="success-banner hidden">
+      <div class="success-icon">✦</div>
+      <div class="success-text">Submitted — thanks!</div>
+      <div class="success-sub">Your report has been logged.</div>
+    </div>
+
+  </div>
+
+  <!-- MANAGER VIEW -->
+  <div id="view-manager" class="view">
+    <div class="page-section">
+      <h2 class="section-heading">Manager Dashboard</h2>
+    </div>
+    <div id="manager-content">
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div class="empty-title">No submissions yet</div>
+        <div class="empty-sub">Staff submissions will appear here.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
