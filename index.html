@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Starlight Ops"/>
+<title>Starlight Glamping — Operations</title>
+<style>
+/* ── Starlight Ops — Stylesheet ────────────────────────────────────
+   Palette: deep navy night + warm amber firelight + sage meadow
+   Signature: star (✦) motif, amber glow on active states
+   ──────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --night:    #0F1923;
+  --navy:     #1A2E3B;
+  --slate:    #2C4A5A;
+  --mist:     #C8D9D4;
+  --sage:     #7FAF8A;
+  --meadow:   #4A8C5C;
+  --amber:    #E8A832;
+  --ember:    #C97B2A;
+  --cream:    #FAF6EE;
+  --sand:     #F0E8D8;
+  --ink:      #1A1A18;
+  --stone:    #7A7A72;
+  --white:    #FFFFFF;
+  --red:      #B83232;
+  --red-bg:   #FDECEA;
+  --green:    #2E7D4A;
+  --green-bg: #EAF5EE;
+  --warn:     #C97B2A;
+  --warn-bg:  #FFF4E0;
+  --radius:   10px;
+  --shadow:   0 1px 4px rgba(0,0,0,0.10);
+}
+
+html, body {
+  height: 100%;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ── */
+.app-header {
+  background: var(--night);
+  padding: 14px 18px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.header-brand { display: flex; align-items: center; gap: 12px; }
+.header-star {
+  font-size: 22px;
+  color: var(--amber);
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(232,168,50,0.6));
+}
+.header-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: 0.01em;
+  font-family: Georgia, serif;
+}
+.header-sub {
+  font-size: 11px;
+  color: var(--mist);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+.header-date {
+  font-size: 12px;
+  color: var(--mist);
+  text-align: right;
+  line-height: 1.4;
+}
+
+/* ── Tab Bar ── */
+.tab-bar {
+  display: flex;
+  background: var(--navy);
+  max-width: 100%;
+  position: sticky;
+  top: 60px;
+  z-index: 99;
+}
+.tab {
+  flex: 1;
+  padding: 11px 8px;
+  background: transparent;
+  border: none;
+  color: var(--mist);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s;
+}
+.tab.active {
+  color: var(--amber);
+  border-bottom-color: var(--amber);
+  font-weight: 700;
+}
+
+/* ── Views ── */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ── Page Sections ── */
+.page-section {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 14px 16px 0;
+}
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 7px;
+}
+.required { color: var(--red); }
+
+.text-input {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1.5px solid var(--mist);
+  border-radius: var(--radius);
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.text-input:focus { border-color: var(--amber); }
+
+.text-area {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1.5px solid var(--mist);
+  border-radius: var(--radius);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--white);
+  min-height: 90px;
+  resize: vertical;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+.text-area:focus { border-color: var(--amber); }
+
+/* ── Checklist Selector Grid ── */
+.checklist-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.cl-btn {
+  padding: 11px 8px;
+  border: 1.5px solid var(--mist);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--slate);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+}
+.cl-btn.active {
+  background: var(--night);
+  color: var(--amber);
+  border-color: var(--amber);
+  box-shadow: 0 0 0 1px var(--amber);
+}
+
+/* ── Card ── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin: 14px 16px 0;
+  max-width: 608px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+.card-header {
+  background: var(--sand);
+  padding: 9px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--slate);
+  border-bottom: 1px solid var(--mist);
+}
+.card-header.amber { background: var(--night); color: var(--amber); }
+
+/* ── Task Rows ── */
+.task-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid #F0F0EC;
+  cursor: pointer;
+  transition: background 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.task-row:last-child { border-bottom: none; }
+.task-row.checked { background: #F4FBF6; }
+.task-row:active { background: #F0F8FF; }
+
+.task-check {
+  width: 23px;
+  height: 23px;
+  border-radius: 6px;
+  border: 2px solid var(--mist);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: all 0.15s;
+}
+.task-row.checked .task-check {
+  background: var(--meadow);
+  border-color: var(--meadow);
+}
+.task-check svg { display: none; }
+.task-row.checked .task-check svg { display: block; }
+
+.task-label {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.45;
+  flex: 1;
+}
+.task-row.checked .task-label {
+  color: var(--stone);
+  text-decoration: line-through;
+}
+
+/* instruction text (collapsible) */
+.task-instruction {
+  font-size: 12px;
+  color: var(--stone);
+  margin-top: 3px;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* ── Info box (for role-specific instructions) ── */
+.info-box {
+  margin: 14px 16px 0;
+  max-width: 608px;
+  margin-left: auto;
+  margin-right: auto;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.info-box strong { color: var(--ember); }
+
+/* ── Tent grid (bear spray / heater) ── */
+.tent-form { padding: 10px 14px 14px; }
+.tent-row {
+  display: grid;
+  grid-template-columns: 52px 1fr 1fr;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #F0F0EC;
+  font-size: 13px;
+}
+.tent-row:last-child { border-bottom: none; }
+.tent-id { font-weight: 700; color: var(--slate); font-size: 13px; }
+.tent-input {
+  padding: 5px 8px;
+  border: 1.5px solid var(--mist);
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--cream);
+  outline: none;
+  width: 100%;
+}
+.tent-input:focus { border-color: var(--amber); }
+.tent-select {
+  padding: 5px 4px;
+  border: 1.5px solid var(--mist);
+  border-radius: 6px;
+  font-size: 12px;
+  background: var(--cream);
+  outline: none;
+  width: 100%;
+}
+.tent-header {
+  display: grid;
+  grid-template-columns: 52px 1fr 1fr;
+  gap: 6px;
+  padding: 6px 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--stone);
+  border-bottom: 2px solid var(--mist);
+  margin-bottom: 4px;
+}
+
+/* ── Project items (optional) ── */
+.optional-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: #EEF4FF;
+  color: #4A6FA8;
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ── Submit button ── */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background: var(--night);
+  color: var(--amber);
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: var(--radius);
+  border: 2px solid var(--amber);
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  margin-top: 6px;
+  transition: all 0.15s;
+  box-shadow: 0 0 0 0 rgba(232,168,50,0);
+}
+.btn-primary:active {
+  background: var(--amber);
+  color: var(--night);
+}
+
+/* ── Success banner ── */
+.success-banner {
+  text-align: center;
+  background: var(--night);
+  border-radius: var(--radius);
+  padding: 32px 20px;
+  margin: 14px 16px 40px;
+  max-width: 608px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.success-icon { font-size: 36px; color: var(--amber); margin-bottom: 12px; filter: drop-shadow(0 0 8px rgba(232,168,50,0.7)); }
+.success-text { font-size: 18px; font-weight: 700; color: var(--cream); font-family: Georgia, serif; }
+.success-sub { font-size: 13px; color: var(--mist); margin-top: 6px; }
+.hidden { display: none !important; }
+
+/* ── Manager Dashboard ── */
+.section-heading {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--night);
+  font-family: Georgia, serif;
+  margin-bottom: 4px;
+}
+
+.stat-row {
+  display: flex;
+  gap: 10px;
+  margin: 14px 16px 0;
+  max-width: 608px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.stat-box {
+  flex: 1;
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 13px 10px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--sage);
+}
+.stat-box.amber-top { border-top-color: var(--amber); }
+.stat-box.green-top { border-top-color: var(--meadow); }
+.stat-num { font-size: 26px; font-weight: 700; color: var(--ink); line-height: 1; }
+.stat-label { font-size: 11px; color: var(--stone); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.log-row {
+  padding: 11px 14px;
+  border-bottom: 1px solid #F0F0EC;
+  font-size: 14px;
+}
+.log-row:last-child { border-bottom: none; }
+.log-who { font-weight: 700; color: var(--night); }
+.log-meta { font-size: 12px; color: var(--stone); margin-top: 2px; }
+.log-notes { font-size: 12px; color: var(--slate); margin-top: 3px; font-style: italic; }
+
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 2px 7px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+.badge-am   { background: #FFF8E8; color: var(--ember); border: 1px solid var(--amber); }
+.badge-pm   { background: #EEF0FF; color: #4A5DA8; border: 1px solid #9AA8D8; }
+.badge-week { background: #EAF5EE; color: var(--green); border: 1px solid var(--sage); }
+.badge-month{ background: #F0EAF8; color: #6A4A98; border: 1px solid #B89AD8; }
+.badge-fire { background: #FFF0E8; color: var(--red); border: 1px solid #D8856A; }
+.badge-maint{ background: #E8F4F8; color: #2A6878; border: 1px solid #6AAAC8; }
+.badge-bear { background: #F8F0E8; color: #7A4A28; border: 1px solid #C8986A; }
+.badge-heat { background: #F8E8E8; color: var(--red); border: 1px solid #D87A7A; }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--stone);
+}
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-title { font-size: 16px; font-weight: 700; color: var(--slate); margin-bottom: 4px; }
+.empty-sub { font-size: 14px; }
+
+/* ── Misc ── */
+.spacer { height: 24px; }
+.divider {
+  height: 1px;
+  background: var(--mist);
+  margin: 14px 16px 0;
+  max-width: 608px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <span class="header-star">✦</span>
+      <div>
+        <div class="header-title">Starlight Glamping</div>
+        <div class="header-sub">Operations &amp; Checklists</div>
+      </div>
+    </div>
+    <div id="headerDate" class="header-date"></div>
+  </div>
+</header>
+<nav class="tab-bar">
+  <button class="tab active" data-tab="staff">Staff</button>
+  <button class="tab" data-tab="manager">Manager</button>
+</nav>
+<div id="view-staff" class="view active">
+  <div class="page-section">
+    <label class="field-label">Your Name <span class="required">*</span></label>
+    <input type="text" id="staffName" class="text-input" placeholder="Enter your name to begin" autocomplete="name"/>
+  </div>
+  <div class="page-section">
+    <label class="field-label">Select Checklist</label>
+    <div class="checklist-grid">
+      <button class="cl-btn active" data-cl="daily-am">🌅 Daily AM</button>
+      <button class="cl-btn" data-cl="daily-pm">🌆 Daily PM</button>
+      <button class="cl-btn" data-cl="weekly">📅 Weekly</button>
+      <button class="cl-btn" data-cl="monthly">📆 Monthly</button>
+      <button class="cl-btn" data-cl="campfire">🔥 Campfire</button>
+      <button class="cl-btn" data-cl="maintenance">🔧 Maintenance</button>
+      <button class="cl-btn" data-cl="bearspray">🐻 Bear Spray</button>
+      <button class="cl-btn" data-cl="heater">♨️ Heaters</button>
+    </div>
+  </div>
+  <div id="checklist-area"></div>
+  <div class="page-section">
+    <label class="field-label">Notes / Issues</label>
+    <textarea id="staffNotes" class="text-area" placeholder="Any issues, maintenance needs, or observations…"></textarea>
+  </div>
+  <div class="page-section">
+    <button id="submitBtn" class="btn-primary">Submit Checklist</button>
+  </div>
+  <div id="successBanner" class="success-banner hidden">
+    <div class="success-icon">✦</div>
+    <div class="success-text">Submitted — thanks!</div>
+    <div class="success-sub">Your report has been logged.</div>
+  </div>
+</div>
+<div id="view-manager" class="view">
+  <div class="page-section"><h2 class="section-heading">Manager Dashboard</h2></div>
+  <div id="manager-content">
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <div class="empty-title">No submissions yet</div>
+      <div class="empty-sub">Staff submissions will appear here.</div>
+    </div>
+  </div>
+</div>
+<script>
+// ── Starlight Glamping — Checklist Data ──────────────────────────
+// All tasks transcribed from the uploaded checklist photos
+
+const CHECKLISTS = {
+
+  "daily-am": {
+    label: "Daily AM",
+    badge: "badge-am",
+    type: "tasks",
+    sections: [
+      {
+        title: "Morning Tasks — AM Shift",
+        tasks: [
+          { id: "am1",  text: "Wipe down kitchen, clean any dirty dishes. Make sure area is clean." },
+          { id: "am2",  text: "Wipe down tables and table covers." },
+          { id: "am3",  text: "Make sure no garbage on ground around community area." },
+          { id: "am4",  text: "Vacuum and sweep welcome center." },
+          { id: "am5",  text: "Make Ready packs." },
+          { id: "am6",  text: "Dust and wipe down all surfaces in welcome center." },
+          { id: "am7",  text: "Start Bluetti charging by generator." },
+          { id: "am8",  text: "ALWAYS PICK UP TRASH ALL OVER SITE.", important: true },
+          { id: "am9",  text: "Charge all Expedia "Hotel Collect" bookings, and make sure the cleaning fee is added." },
+          { id: "am10", text: "Refill Dawn power wash in bottles and clean. Let Morgan know if running low." },
+          { id: "am11", text: "Restock Grab n' go items. Text Morgan what we are running low on." },
+        ]
+      }
+    ]
+  },
+
+  "daily-pm": {
+    label: "Daily PM",
+    badge: "badge-pm",
+    type: "tasks",
+    sections: [
+      {
+        title: "Afternoon / Evening Tasks — PM Shift",
+        tasks: [
+          { id: "pm1", text: "Make sure vacuums are charging." },
+          { id: "pm2", text: "Swap out any empty propane tanks on BBQ and camp chef." },
+          { id: "pm3", text: "Refill small propane tanks." },
+          { id: "pm4", text: "ALWAYS PICK UP TRASH ALL OVER SITE.", important: true },
+          { id: "pm5", text: "Clean hot dog roasters." },
+          { id: "pm6", text: "Clean out bowl of S'mores kits, and container for graham crackers." },
+          { id: "pm7", text: "Refill "Truck linen boxes" with items as per their label." },
+          { id: "pm8", text: "Make sure Dawn Power wash is full for dinner cleaning. *Text Morgan if running low on main supply*" },
+        ]
+      }
+    ]
+  },
+
+  "weekly": {
+    label: "Weekly",
+    badge: "badge-week",
+    type: "tasks",
+    sections: [
+      {
+        title: "Weekly Tasks",
+        tasks: [
+          { id: "wk1",  text: "Deep clean BBQ — interior and exterior. Clean out underneath griddle, or fire will start!", important: true },
+          { id: "wk2",  text: "Empty out fire pits of ash to burn barrel." },
+          { id: "wk3",  text: "Drain septics on both Trailers (2x/week)." },
+          { id: "wk4",  text: "Clean vacuum filters. Blow out with air compressor." },
+          { id: "wk5",  text: "ALWAYS PICK UP TRASH ALL OVER SITE.", important: true },
+          { id: "wk6",  text: "Clean heaters — take rubbing alcohol and a q-tip and clean out the thermocoupler, wipe down the exterior. *Never store heaters outside*", important: true },
+          { id: "wk7",  text: "Organize propane tanks. Blue caps = full. Not full but not empty = put small colored magnet on them. Empty tanks stay in propane cages to be replaced by Amerigas." },
+          { id: "wk8",  text: "Clean sugar and creamer container, tea holder container and stick container." },
+          { id: "wk9",  text: "Refill oil dispensers, salt and pepper dispensers and clean them." },
+          { id: "wk10", text: "Check kitchen water tanks." },
+        ]
+      }
+    ]
+  },
+
+  "monthly": {
+    label: "Monthly",
+    badge: "badge-month",
+    type: "tasks",
+    sections: [
+      {
+        title: "Monthly Tasks",
+        tasks: [
+          { id: "mo1",  text: "Wipe down solar panels — Family Bells." },
+          { id: "mo2",  text: "Wipe down solar panels — Luxury Bells." },
+          { id: "mo3",  text: "Wipe down solar panels — Tipis." },
+          { id: "mo4",  text: "Tighten stakes, rope and poles — Family Bells." },
+          { id: "mo5",  text: "Tighten stakes, rope and poles — Luxury Bells." },
+          { id: "mo6",  text: "Mop Safari Decks." },
+          { id: "mo7",  text: "Mop Tipi Decks." },
+          { id: "mo8",  text: "Weed whack — family bells." },
+          { id: "mo9",  text: "Weed whack — luxury bells." },
+          { id: "mo10", text: "Weed whack — community area." },
+          { id: "mo11", text: "Pick up cow pies." },
+          { id: "mo12", text: "Clean out fridge — quick wipe down and throw away any old food." },
+          { id: "mo13", text: "ALWAYS PICK UP TRASH ALL OVER SITE.", important: true },
+          { id: "mo14", text: "Clean and organize storage unit." },
+          { id: "mo15", text: "Clean and organize storage container." },
+          { id: "mo16", text: "Clean and organize welcome center." },
+        ]
+      }
+    ]
+  },
+
+  "campfire": {
+    label: "Campfire",
+    badge: "badge-fire",
+    type: "tasks",
+    info: "At the end of every shift (9:00, 4:00 & 10:00) text leaders a quick shift report on what got done and any issues you had.",
+    sections: [
+      {
+        title: "Campfire Setup & Evening",
+        tasks: [
+          { id: "cf1",  text: "Fire ready for guests to make s'mores by 7:00PM. Start between 6:30–6:45.", important: true },
+          { id: "cf2",  text: "Graham crackers ready for guests with their s'mores kits from welcome center." },
+          { id: "cf3",  text: "S'mores kits — guests must ask for them (not left out). One kit per guest.", important: true },
+          { id: "cf4",  text: "Check on restrooms every 30–45 minutes." },
+          { id: "cf5",  text: "Wipe any dirt/mud from floors/toilet pedals using a rag, NOT paper towels." },
+          { id: "cf6",  text: "Make sure there's enough toilet paper." },
+          { id: "cf7",  text: "Check water levels in restrooms." },
+          { id: "cf8",  text: "Help out around the cooking area — start BBQ if people need help." },
+          { id: "cf9",  text: "Make sure there's enough propane at cooking area." },
+          { id: "cf10", text: "Help if the sink is having any issues." },
+          { id: "cf11", text: "Help person in welcome center with any check-ins or guest requests." },
+        ]
+      },
+      {
+        title: "Do NOT Clock Out Until…",
+        tasks: [
+          { id: "cf12", text: "Bathrooms checked for cleanliness." },
+          { id: "cf13", text: "Shake out the mats." },
+          { id: "cf14", text: "Wipe counters with blue rags — NOT paper towels.", important: true },
+          { id: "cf15", text: "Restock toilet paper." },
+          { id: "cf16", text: "Wipe up dirty or wet spots on the floor." },
+          { id: "cf17", text: "Water heaters confirmed on." },
+          { id: "cf18", text: "Enough water in tanks to get through the night." },
+          { id: "cf19", text: "All keys hung up in the container (including paper towel and bathroom door keys)." },
+          { id: "cf20", text: "Fire put out and s'more stuff put away." },
+          { id: "cf21", text: "Outdoor trash can dumped or put in shipping container." },
+          { id: "cf22", text: "Welcome center closed up — zip up windows and door." },
+          { id: "cf23", text: "Coffee grounds ready for next morning." },
+          { id: "cf24", text: "Someone has phone to sleep with." },
+          { id: "cf25", text: "Turn off light, bug zapper and heater." },
+          { id: "cf26", text: "Garbage can, laptop, iPad, Square and cash box put in container.", important: true },
+          { id: "cf27", text: "Container is locked.", important: true },
+          { id: "cf28", text: "Close up kitchen — turn off propane tanks from BBQ and Camp Chef, unplug the sink." },
+        ]
+      }
+    ]
+  },
+
+  "maintenance": {
+    label: "Maintenance",
+    badge: "badge-maint",
+    type: "tasks",
+    info: "At the end of every shift (9:00, 4:00 & 10:00) text leaders a quick shift report on what got done and any issues you had. Meet at 9:00am in the welcome center to discuss the plan for the day.",
+    sections: [
+      {
+        title: "Daily Maintenance",
+        tasks: [
+          { id: "mn1", text: "Help cleaning crew with tents and bathrooms unless there is anything pressing." },
+          { id: "mn2", text: "Go fill up water at the well — hook up water trailer to work truck.", important: true },
+          { id: "mn3", text: "Make sure plug and chains are attached from trailer before leaving." },
+          { id: "mn4", text: "Inspect tires before you leave." },
+          { id: "mn5", text: "Use air suspension when hauling heavy loads — pump to ~35psi. (Air hose connections on each side of license plate.)", important: true },
+          { id: "mn6", text: "Make sure there's enough gas in the truck to make it back." },
+          { id: "mn7", text: "Always have truck in tow/haul when trailer is attached." },
+          { id: "mn8", text: "Hook up hose at well and make sure it won't fly out of tank." },
+          { id: "mn9", text: "Bring empty blue 5-gallon jugs and fill those up too." },
+          { id: "mn10", text: "Once tanks full — load hoses, head back. Back trailer into spot, start pumping into ground tanks ASAP." },
+          { id: "mn11", text: "Unhook truck once water is draining." },
+          { id: "mn12", text: "DO NOT run over a hose. Hang them up, never leave on ground, never let end touch ground.", important: true },
+        ]
+      },
+      {
+        title: "Weekly Maintenance",
+        tasks: [
+          { id: "mn13", text: "Change generator oil and perform maintenance. Each takes ~0.62 quarts of 10W-30 Synthetic oil.", note: "If needed: search 'Firman Dual Fuel Generator Post Purchase Maintenance on YouTube by HSN'" },
+        ]
+      },
+      {
+        title: "Projects (as needed)",
+        optional: true,
+        tasks: [
+          { id: "mn14", text: "Make more solar panel holders for tents.", optional: true },
+          { id: "mn15", text: "Make more A-frames?", optional: true },
+          { id: "mn16", text: "Make wood chips and add to FB tent entrances.", optional: true },
+          { id: "mn17", text: "Make wood chips and add to LB tent entrances.", optional: true },
+          { id: "mn18", text: "Make wood chips and add to Safari entrances.", optional: true },
+          { id: "mn19", text: "Make wood chips and add to Tipi entrances.", optional: true },
+        ]
+      }
+    ]
+  },
+
+  "bearspray": {
+    label: "Bear Spray",
+    badge: "badge-bear",
+    type: "tent-tracker",
+    trackingType: "bearspray",
+    tents: ["LB1","LB2","LB3","LB4","LB5","LB6","LB7","LB8","LB9","LB10",
+            "FB1","FB2","FB3","FB4","FB5","FB6","FB7","FB8","FB9","FB10",
+            "SF1","SF2","SF3","SF4",
+            "TP1","TP2","TP3","TP4","TP5","TP6","TP7","TP8"]
+  },
+
+  "heater": {
+    label: "Heaters",
+    badge: "badge-heat",
+    type: "tent-tracker",
+    trackingType: "heater",
+    tents: ["LB1","LB2","LB3","LB4","LB5","LB6","LB7","LB8","LB9","LB10",
+            "FB1","FB2","FB3","FB4","FB5","FB6","FB7","FB8","FB9","FB10",
+            "SF1","SF2","SF3","SF4",
+            "TP1","TP2","TP3","TP4","TP5","TP6","TP7","TP8"]
+  }
+
+};
+// ── Starlight Glamping — App Logic ───────────────────────────────
+
+// ── Storage helpers ──
+function storageGet(key) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; }
+  catch { return null; }
+}
+function storageSet(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+}
+
+// ── State ──
+let currentCL = "daily-am";
+let checkState = {};       // { taskId: true/false }
+let tentState  = {};       // { tentId: { field: value } }
+let allReports = storageGet("sl_reports") || [];
+
+// ── Date helpers ──
+function todayStr() {
+  return new Date().toLocaleDateString("en-US", { weekday:"short", month:"short", day:"numeric", year:"numeric" });
+}
+function nowStr() {
+  return new Date().toLocaleTimeString("en-US", { hour:"2-digit", minute:"2-digit" });
+}
+function todayKey() { return new Date().toISOString().split("T")[0]; }
+
+// ── Init ──
+document.getElementById("headerDate").innerHTML =
+  new Date().toLocaleDateString("en-US", { weekday:"long" }) + "<br>" +
+  new Date().toLocaleDateString("en-US", { month:"short", day:"numeric" });
+
+// ── Tab switching ──
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById("view-" + tab.dataset.tab).classList.add("active");
+    if (tab.dataset.tab === "manager") renderManager();
+  });
+});
+
+// ── Checklist selector ──
+document.querySelectorAll(".cl-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".cl-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentCL = btn.dataset.cl;
+    checkState = {};
+    tentState  = {};
+    renderChecklist();
+    // hide success if switching
+    document.getElementById("successBanner").classList.add("hidden");
+    document.getElementById("submitBtn").classList.remove("hidden");
+    document.querySelector(".page-section:last-of-type").style.display = "";
+  });
+});
+
+// ── Render checklist area ──
+function renderChecklist() {
+  const area = document.getElementById("checklist-area");
+  const cl = CHECKLISTS[currentCL];
+  if (!cl) { area.innerHTML = ""; return; }
+
+  let html = "";
+
+  // Info box for role-specific notes
+  if (cl.info) {
+    html += `<div class="info-box">⚠️ <strong>Shift reminder:</strong> ${cl.info}</div>`;
+  }
+
+  if (cl.type === "tasks") {
+    cl.sections.forEach(sec => {
+      html += `<div class="card">`;
+      html += `<div class="card-header${sec.optional ? '' : ''}">${sec.title}</div>`;
+      sec.tasks.forEach(task => {
+        const imp = task.important ? ' style="font-weight:600;"' : "";
+        const opt = task.optional ? `<span class="optional-badge">Optional</span>` : "";
+        html += `
+          <div class="task-row" data-id="${task.id}" onclick="toggleTask('${task.id}')">
+            <div class="task-check">
+              <svg width="13" height="10" viewBox="0 0 13 10" fill="none">
+                <path d="M1 5L5 9L12 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="task-label">
+              <span${imp}>${task.text}</span>${opt}
+              ${task.note ? `<div class="task-instruction">${task.note}</div>` : ""}
+            </div>
+          </div>`;
+      });
+      html += `</div>`;
+    });
+
+  } else if (cl.type === "tent-tracker") {
+    html += renderTentTracker(cl);
+  }
+
+  area.innerHTML = html;
+}
+
+function toggleTask(id) {
+  checkState[id] = !checkState[id];
+  const row = document.querySelector(`.task-row[data-id="${id}"]`);
+  if (row) row.classList.toggle("checked", !!checkState[id]);
+}
+
+// ── Tent tracker renderer ──
+function renderTentTracker(cl) {
+  let html = `<div class="card">`;
+
+  if (cl.trackingType === "bearspray") {
+    html += `<div class="card-header amber">🐻 Bear Spray — Guest Return Tracker</div>`;
+    html += `<div class="tent-form">`;
+    html += `<div class="tent-header"><span>Tent</span><span>Check-in</span><span>Check-out / Returned?</span></div>`;
+    cl.tents.forEach(tent => {
+      html += `
+        <div class="tent-row">
+          <span class="tent-id">${tent}</span>
+          <input class="tent-input" type="date" data-tent="${tent}" data-field="checkin"
+            onchange="updateTent('${tent}','checkin',this.value)" />
+          <select class="tent-select" data-tent="${tent}" data-field="returned"
+            onchange="updateTent('${tent}','returned',this.value)">
+            <option value="">—</option>
+            <option value="returned">Returned ✓</option>
+            <option value="missing">Missing ✗</option>
+            <option value="na">N/A</option>
+          </select>
+        </div>`;
+    });
+    html += `</div></div>`;
+
+  } else if (cl.trackingType === "heater") {
+    html += `<div class="card-header amber">♨️ Heater Tracker — Per Tent</div>`;
+    html += `<div class="tent-form">`;
+    html += `<div class="tent-header"><span>Tent</span><span>Paid?</span><span>Size / # Tanks</span></div>`;
+    cl.tents.forEach(tent => {
+      html += `
+        <div class="tent-row">
+          <span class="tent-id">${tent}</span>
+          <select class="tent-select" data-tent="${tent}" data-field="paid"
+            onchange="updateTent('${tent}','paid',this.value)">
+            <option value="">—</option>
+            <option value="yes">Paid ✓</option>
+            <option value="no">Not paid</option>
+            <option value="na">N/A</option>
+          </select>
+          <select class="tent-select" data-tent="${tent}" data-field="size"
+            onchange="updateTent('${tent}','size',this.value)">
+            <option value="">—</option>
+            <option value="big-1">Big — 1 tank</option>
+            <option value="big-2">Big — 2 tanks</option>
+            <option value="little-1">Little — 1 tank</option>
+            <option value="little-2">Little — 2 tanks</option>
+            <option value="na">N/A</option>
+          </select>
+        </div>`;
+    });
+    html += `</div></div>`;
+  }
+
+  return html;
+}
+
+function updateTent(tent, field, value) {
+  if (!tentState[tent]) tentState[tent] = {};
+  tentState[tent][field] = value;
+}
+
+// ── Submit ──
+document.getElementById("submitBtn").addEventListener("click", () => {
+  const name = document.getElementById("staffName").value.trim();
+  if (!name) {
+    alert("Please enter your name before submitting.");
+    document.getElementById("staffName").focus();
+    return;
+  }
+
+  const cl = CHECKLISTS[currentCL];
+  let taskSummary = {};
+  let completedCount = 0;
+  let totalCount = 0;
+
+  if (cl.type === "tasks") {
+    cl.sections.forEach(sec => {
+      sec.tasks.forEach(task => {
+        if (!task.optional) totalCount++;
+        taskSummary[task.id] = !!checkState[task.id];
+        if (checkState[task.id]) completedCount++;
+      });
+    });
+  }
+
+  const report = {
+    id: Date.now(),
+    date: todayKey(),
+    dateLabel: todayStr(),
+    time: nowStr(),
+    staff: name,
+    checklist: currentCL,
+    checklistLabel: cl.label,
+    tasks: taskSummary,
+    tents: { ...tentState },
+    notes: document.getElementById("staffNotes").value.trim(),
+    completedCount,
+    totalCount,
+  };
+
+  allReports.push(report);
+  storageSet("sl_reports", allReports);
+  syncToSheets(report);
+
+  // Show success
+  document.getElementById("submitBtn").classList.add("hidden");
+  document.getElementById("staffNotes").value = "";
+  document.getElementById("successBanner").classList.remove("hidden");
+
+  // Reset after 4s so they can submit another checklist
+  setTimeout(() => {
+    checkState = {};
+    tentState  = {};
+    renderChecklist();
+    document.getElementById("successBanner").classList.add("hidden");
+    document.getElementById("submitBtn").classList.remove("hidden");
+  }, 4000);
+});
+
+// ── Manager Dashboard ──
+function renderManager() {
+  const el = document.getElementById("manager-content");
+  if (!allReports.length) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div class="empty-title">No submissions yet</div>
+        <div class="empty-sub">Staff submissions will appear here once the daily checklist is completed.</div>
+      </div>`;
+    return;
+  }
+
+  // Stats
+  const today = allReports.filter(r => r.date === todayKey());
+  const total = allReports.length;
+  const staffSet = new Set(allReports.map(r => r.staff));
+
+  // Sort recent first
+  const recent = [...allReports].reverse().slice(0, 30);
+
+  const badgeMap = {
+    "daily-am": "badge-am", "daily-pm": "badge-pm",
+    "weekly": "badge-week", "monthly": "badge-month",
+    "campfire": "badge-fire", "maintenance": "badge-maint",
+    "bearspray": "badge-bear", "heater": "badge-heat"
+  };
+
+  let html = `
+    <div class="stat-row">
+      <div class="stat-box amber-top">
+        <div class="stat-num">${today.length}</div>
+        <div class="stat-label">Today</div>
+      </div>
+      <div class="stat-box green-top">
+        <div class="stat-num">${total}</div>
+        <div class="stat-label">All time</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">${staffSet.size}</div>
+        <div class="stat-label">Staff</div>
+      </div>
+    </div>`;
+
+  // Today's submissions highlighted
+  if (today.length) {
+    html += `<div class="card" style="margin-top:14px;">`;
+    html += `<div class="card-header">✅ Today's Submissions</div>`;
+    today.forEach(r => {
+      const pct = r.totalCount ? Math.round((r.completedCount / r.totalCount) * 100) : null;
+      html += `
+        <div class="log-row">
+          <div class="log-who">${r.staff}
+            <span class="badge ${badgeMap[r.checklist] || ''}">${r.checklistLabel}</span>
+          </div>
+          <div class="log-meta">${r.time}${pct !== null ? ` · ${r.completedCount}/${r.totalCount} tasks (${pct}%)` : ''}</div>
+          ${r.notes ? `<div class="log-notes">"${r.notes}"</div>` : ""}
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Full history
+  html += `<div class="card" style="margin-top:14px; margin-bottom: 40px;">`;
+  html += `<div class="card-header">Recent Submissions</div>`;
+  recent.forEach(r => {
+    const pct = r.totalCount ? Math.round((r.completedCount / r.totalCount) * 100) : null;
+    html += `
+      <div class="log-row">
+        <div class="log-who">${r.staff}
+          <span class="badge ${badgeMap[r.checklist] || ''}">${r.checklistLabel}</span>
+        </div>
+        <div class="log-meta">${r.dateLabel} · ${r.time}${pct !== null ? ` · ${r.completedCount}/${r.totalCount} tasks` : ''}</div>
+        ${r.notes ? `<div class="log-notes">"${r.notes}"</div>` : ""}
+      </div>`;
+  });
+  html += `</div>`;
+
+  el.innerHTML = html;
+}
+
+// ── Google Sheets sync ──
+// Replace the URL below with your deployed Apps Script Web App URL
+const SHEETS_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+function syncToSheets(report) {
+  if (!SHEETS_URL || SHEETS_URL.includes("PASTE_YOUR")) return;
+  fetch(SHEETS_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(report)
+  }).catch(err => console.warn("Sheets sync failed:", err));
+}
+
+// ── Initial render ──
+renderChecklist();
+</script></body></html>
